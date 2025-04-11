@@ -124,34 +124,96 @@
       text-align: center;
       padding: 20px;
       background-color: #f8f9fa;
+      background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      animation: fadeIn 0.8s ease;
+    }
+    
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
     }
     
     .container {
       max-width: 500px;
       width: 100%;
       background-color: white;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideUp 0.6s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .container:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #0096ad, #00d4ff);
+    }
+    
+    @keyframes slideUp {
+      0% { 
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% { 
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .app-logo {
       width: 120px;
       height: 120px;
-      margin: 0 auto 20px;
+      margin: 0 auto 25px;
       display: block;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 150, 173, 0.2);
+      transform: scale(1);
+      transition: transform 0.3s ease;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .app-logo:hover {
+      transform: scale(1.05);
     }
     
     h1 {
       font-size: 24px;
       margin-bottom: 20px;
       color: #0096ad;
+      position: relative;
+      display: inline-block;
+    }
+    
+    h1:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, #0096ad, #00d4ff);
+      transform: translateX(-50%);
+      border-radius: 3px;
     }
     
     p {
@@ -170,21 +232,40 @@
       border-radius: 50px;
       font-weight: 600;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0, 150, 173, 0.3);
+      box-shadow: 0 4px 10px rgba(0, 150, 173, 0.3);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.4s ease;
+      z-index: -1;
     }
     
     .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 150, 173, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 15px rgba(0, 150, 173, 0.4);
+    }
+    
+    .btn:hover:before {
+      left: 100%;
     }
     
     .btn-android {
-      background-color: #3ddc84;
+      background-image: linear-gradient(135deg, #3ddc84 0%, #2ab965 100%);
       color: #000;
     }
     
     .btn-ios {
-      background-color: #007aff;
+      background-image: linear-gradient(135deg, #007aff 0%, #00b2ff 100%);
     }
     
     #loading {
@@ -213,17 +294,18 @@
       width: 100%;
       height: 10px;
       background-color: #f1f1f1;
-      border-radius: 5px;
+      border-radius: 10px;
       margin: 20px 0;
       overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     }
     
     .progress-bar {
       height: 100%;
       width: 0%;
-      background-color: #0096ad;
-      border-radius: 5px;
-      transition: width 0.3s ease;
+      background-image: linear-gradient(90deg, #0096ad, #00d4ff);
+      border-radius: 10px;
+      transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
     
     #progress-status {
@@ -231,6 +313,13 @@
       color: #666;
       margin-bottom: 10px;
       font-style: italic;
+      animation: fadeInOut 1.5s ease infinite;
+    }
+    
+    @keyframes fadeInOut {
+      0% { opacity: 0.7; }
+      50% { opacity: 1; }
+      100% { opacity: 0.7; }
     }
     
     .debug-info {
@@ -242,9 +331,29 @@
     
     .device-info-box {
       background-color: rgba(0, 150, 173, 0.08);
-      border-radius: 10px;
-      padding: 20px;
+      border-radius: 15px;
+      padding: 25px;
       margin-bottom: 25px;
+      box-shadow: 0 3px 10px rgba(0, 150, 173, 0.1);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInScale 0.5s ease;
+    }
+    
+    @keyframes fadeInScale {
+      0% { 
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% { 
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .device-info-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 150, 173, 0.15);
     }
     
     .device-info-box h2 {
@@ -258,6 +367,14 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 15px;
+      padding: 10px;
+      animation: bounce 0.6s ease;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
     }
     
     .device-icon {
@@ -266,30 +383,35 @@
       margin-right: 15px;
       color: #0096ad;
       object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
     
     #device-name, #manual-device-name {
       font-weight: bold;
       color: #0096ad;
       font-size: 20px;
+      text-shadow: 0 1px 2px rgba(0, 150, 173, 0.1);
     }
     
     .redirect-message {
       font-size: 16px;
       color: #0096ad;
       margin: 20px 0;
+      animation: fadeIn 1s ease;
     }
     
     .countdown {
       display: inline-block;
-      width: 30px;
-      height: 30px;
-      line-height: 30px;
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
       background-color: #0096ad;
       color: white;
       border-radius: 50%;
       margin: 0 5px;
       font-weight: bold;
+      box-shadow: 0 3px 8px rgba(0, 150, 173, 0.3);
+      animation: pulse 1s infinite alternate;
     }
     
     @keyframes spin {
