@@ -6,25 +6,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="下載我們的應用程式測試版">
   <script>
-    window.onload = function() {
-      // Show loading animation first
+    // 當頁面完全載入後執行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 顯示載入動畫
       document.getElementById("loading").style.display = "block";
       
+      // 設定一個計時器，確保頁面有時間呈現
       setTimeout(function() {
         var ua = navigator.userAgent || navigator.vendor || window.opera;
-        if (/android/i.test(ua)) {
-          // Android device redirect
+        console.log("用戶代理: " + ua); // 用於調試
+        
+        // 更精確的Android裝置檢測
+        if (ua.toLowerCase().indexOf("android") > -1) {
+          console.log("檢測到Android設備，正在轉址...");
           window.location.href = "https://play.google.com/apps/testing/org.iii.transcriber";
-        } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-          // iOS device redirect
+        } 
+        // iOS裝置檢測
+        else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+          console.log("檢測到iOS設備，正在轉址...");
           window.location.href = "https://testflight.apple.com/join/31JwQpF7";
-        } else {
-          // Other platforms (like desktop) show manual selection
+        } 
+        // 其他裝置顯示手動選擇
+        else {
+          console.log("無法自動檢測設備類型，顯示手動選擇");
           document.getElementById("loading").style.display = "none";
           document.getElementById("manual").style.display = "block";
         }
-      }, 1500); // Short delay for better UX
-    };
+      }, 1000); // 延遲一秒，確保頁面載入完成
+    });
   </script>
   <style>
     * {
@@ -60,8 +69,6 @@
       height: 120px;
       margin: 0 auto 20px;
       display: block;
-      border-radius: 24px;
-      overflow: hidden;
     }
     
     h1 {
@@ -103,7 +110,11 @@
       background-color: #007aff;
     }
     
-    .loading {
+    #loading {
+      display: block;
+    }
+    
+    #manual {
       display: none;
     }
     
@@ -120,6 +131,13 @@
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+    
+    .debug-info {
+      font-size: 12px;
+      color: #999;
+      margin-top: 20px;
+      display: none;
     }
     
     @media (max-width: 480px) {
@@ -141,4 +159,27 @@
 </head>
 <body>
   <div class="container">
-    <img src="transcribe.png" alt="App Logo" class="app-logo">
+    <img src="transcribe.png" alt="App 圖示" class="app-logo">
+    
+    <div id="loading">
+      <h1>準備下載應用測試版</h1>
+      <p>正在為您導向適合的測試版下載頁面，請稍候...</p>
+      <div class="spinner"></div>
+    </div>
+    
+    <div id="manual">
+      <h1>下載應用測試版</h1>
+      <p>請選擇您的設備類型以下載適合的測試版：</p>
+      <a href="https://play.google.com/apps/testing/org.iii.transcriber" class="btn btn-android">Android 測試版</a>
+      <a href="https://testflight.apple.com/join/31JwQpF7" class="btn btn-ios">iOS TestFlight</a>
+      <p class="debug-info" id="debug-ua"></p>
+      
+      <script>
+        // 顯示用戶代理資訊以便調試
+        document.getElementById('debug-ua').textContent = "用戶代理: " + navigator.userAgent;
+        document.getElementById('debug-ua').style.display = "block";
+      </script>
+    </div>
+  </div>
+</body>
+</html>
