@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>下載 App 測試版</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="下載我們的應用程式測試版">
+  <script>
+    window.onload = function() {
+      // Show loading animation first
+      document.getElementById("loading").style.display = "block";
+      
+      setTimeout(function() {
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
+        if (/android/i.test(ua)) {
+          // Android device redirect
+          window.location.href = "https://play.google.com/apps/testing/org.iii.transcriber";
+        } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+          // iOS device redirect
+          window.location.href = "https://testflight.apple.com/join/31JwQpF7";
+        } else {
+          // Other platforms (like desktop) show manual selection
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("manual").style.display = "block";
+        }
+      }, 1500); // Short delay for better UX
+    };
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f8f9fa;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 500px;
+      width: 100%;
+      background-color: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .app-logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      display: block;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #0096ad;
+    }
+    
+    p {
+      margin-bottom: 25px;
+      line-height: 1.5;
+      color: #666;
+    }
+    
+    .btn {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 25px;
+      text-decoration: none;
+      color: white;
+      background-color: #0096ad;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 150, 173, 0.3);
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 150, 173, 0.4);
+    }
+    
+    .btn-android {
+      background-color: #3ddc84;
+      color: #000;
+    }
+    
+    .btn-ios {
+      background-color: #007aff;
+    }
+    
+    .loading {
+      display: none;
+    }
+    
+    .spinner {
+      border: 4px solid rgba(0, 150, 173, 0.2);
+      border-top: 4px solid #0096ad;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 20px;
+      }
+      
+      .btn {
+        display: block;
+        margin: 15px auto;
+        max-width: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="transcribe.png" alt="App Logo" class="app-logo">
