@@ -56,14 +56,14 @@
               if (ua.toLowerCase().indexOf("android") > -1) {
                 console.log("檢測到Android設備");
                 deviceName = "Android";
-                iconUrl = "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/smartphone.svg";
+                iconUrl = "https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg";
                 redirectUrl = "https://play.google.com/apps/testing/org.iii.transcriber";
               } 
               // iOS裝置處理
               else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
                 console.log("檢測到iOS設備");
                 deviceName = "iOS";
-                iconUrl = "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/apple.svg";
+                iconUrl = "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg";
                 redirectUrl = "https://testflight.apple.com/join/31JwQpF7";
               } 
               // 其他裝置顯示手動選擇
@@ -75,13 +75,13 @@
                 // 檢測常見設備類型並顯示
                 if (/Windows/.test(ua)) {
                   document.getElementById('manual-device-name').textContent = "Windows";
-                  document.getElementById('manual-device-icon').src = "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/monitor.svg";
+                  document.getElementById('manual-device-icon').src = "https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg";
                 } else if (/Macintosh|Mac OS X/.test(ua)) {
                   document.getElementById('manual-device-name').textContent = "Mac";
-                  document.getElementById('manual-device-icon').src = "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/apple.svg";
+                  document.getElementById('manual-device-icon').src = "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg";
                 } else if (/Linux/.test(ua)) {
                   document.getElementById('manual-device-name').textContent = "Linux";
-                  document.getElementById('manual-device-icon').src = "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/terminal.svg";
+                  document.getElementById('manual-device-icon').src = "https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg";
                 }
                 return; // 不執行後續的轉址步驟
               }
@@ -265,6 +265,7 @@
       height: 36px;
       margin-right: 15px;
       color: #0096ad;
+      object-fit: contain;
     }
     
     #device-name, #manual-device-name {
