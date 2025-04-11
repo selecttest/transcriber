@@ -40,56 +40,82 @@
       }, 800);
     });
 
-    // 改進的轉址動畫函數
     function startRedirectAnimation(url) {
-      // 添加進度條效果
-      var progressBar = document.getElementById("progress-bar");
-      var progressContainer = document.querySelector(".progress-container");
+      // 先顯示裝置識別動畫
+      var redirectText = document.getElementById("redirect-text");
+      var deviceType = "";
       
-      // 添加閃光效果
-      var shimmer = document.createElement('div');
-      shimmer.className = 'shimmer';
-      progressBar.appendChild(shimmer);
+      if (url.indexOf("play.google.com") > -1) {
+        deviceType = "Android";
+        document.getElementById("device-icon").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="#3ddc84"><path d="M17.6,9.48l1.84-3.18c0.16-0.31,0.04-0.69-0.26-0.85c-0.29-0.15-0.65-0.06-0.83,0.22l-1.88,3.24 c-2.86-1.21-6.08-1.21-8.94,0L5.65,5.67c-0.19-0.29-0.58-0.38-0.87-0.2C4.5,5.65,4.41,6.01,4.56,6.3L6.4,9.48 C3.3,11.25,1.28,14.44,1,18h22C22.72,14.44,20.7,11.25,17.6,9.48z M7,15.25c-0.69,0-1.25-0.56-1.25-1.25 c0-0.69,0.56-1.25,1.25-1.25S8.25,13.31,8.25,14C8.25,14.69,7.69,15.25,7,15.25z M17,15.25c-0.69,0-1.25-0.56-1.25-1.25 c0-0.69,0.56-1.25,1.25-1.25s1.25,0.56,1.25,1.25C18.25,14.69,17.69,15.25,17,15.25z"/></svg>';
+      } else {
+        deviceType = "iOS";
+        document.getElementById("device-icon").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="#007aff"><path d="M17.05,20.28c-0.98,0.95-2.05,0.8-3.08,0.35c-1.09-0.46-2.09-0.48-3.24,0c-1.44,0.62-2.2,0.44-3.06-0.35 C2.79,15.5,3.51,7.8,8.42,7.47c1.54-0.12,2.65,0.82,3.57,0.87c1.38-0.17,2.38-1,3.83-0.86C18,7.66,19.13,8.82,19.76,10.5 c-4.26,2.34-3.46,7.49,0.38,9.5C19.41,21.54,18.26,21.47,17.05,20.28z M12.03,7c0.12-2.14,1.88-3.89,3.95-4 C16.24,5.18,14.19,7.05,12.03,7z"/></svg>';
+      }
       
-      var width = 1;
-      var interval = setInterval(function() {
-        if (width >= 100) {
-          clearInterval(interval);
-          // 添加脈衝效果
-          progressContainer.classList.add('pulse');
+      // 顯示設備識別提示動畫
+      document.getElementById("device-detected").style.display = "flex";
+      document.getElementById("device-type").innerText = deviceType;
+      
+      setTimeout(function() {
+        // 淡出設備識別提示
+        document.getElementById("device-detected").style.opacity = "0";
+        
+        setTimeout(function() {
+          // 淡入加載進度條
+          document.getElementById("device-detected").style.display = "none";
+          document.getElementById("loading-progress").style.display = "block";
+          document.getElementById("loading-progress").style.opacity = "1";
           
-          // 變更文字並添加漸變效果
-          var redirectText = document.getElementById("redirect-text");
-          redirectText.style.opacity = "0";
+          // 添加進度條效果
+          var progressBar = document.getElementById("progress-bar");
+          var progressContainer = document.querySelector(".progress-container");
           
-          setTimeout(function() {
-            redirectText.innerText = "正在前往下載頁面...";
-            redirectText.style.opacity = "1";
-            
-            // 添加容器上升動畫
-            var container = document.querySelector('.container');
-            container.style.transition = "transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1)";
-            container.style.transform = "translateY(-30px)";
-            
-            setTimeout(function() {
-              window.location.href = url;
-            }, 800);
-          }, 300);
+          // 添加閃光效果
+          var shimmer = document.createElement('div');
+          shimmer.className = 'shimmer';
+          progressBar.appendChild(shimmer);
           
-        } else {
-          // 非線性進度，開始慢然後加速
-          if (width < 30) {
-            width += 0.6;
-          } else if (width < 60) {
-            width += 1;
-          } else if (width < 80) {
-            width += 0.8;
-          } else {
-            width += 0.5;
-          }
-          progressBar.style.width = width + "%";
-        }
-      }, 15);
+          var width = 1;
+          var interval = setInterval(function() {
+            if (width >= 100) {
+              clearInterval(interval);
+              // 添加脈衝效果
+              progressContainer.classList.add('pulse');
+              
+              // 變更文字並添加漸變效果
+              redirectText.style.opacity = "0";
+              
+              setTimeout(function() {
+                redirectText.innerText = "正在前往下載頁面...";
+                redirectText.style.opacity = "1";
+                
+                // 添加容器上升動畫
+                var container = document.querySelector('.container');
+                container.style.transition = "transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1)";
+                container.style.transform = "translateY(-30px)";
+                
+                setTimeout(function() {
+                  window.location.href = url;
+                }, 800);
+              }, 300);
+              
+            } else {
+              // 非線性進度，開始慢然後加速
+              if (width < 30) {
+                width += 0.6;
+              } else if (width < 60) {
+                width += 1;
+              } else if (width < 80) {
+                width += 0.8;
+              } else {
+                width += 0.5;
+              }
+              progressBar.style.width = width + "%";
+            }
+          }, 15);
+        }, 1500);
+      }, 1800);
     }
   </script>
   <style>
@@ -263,6 +289,68 @@
       100% { transform: scale(1); box-shadow: 0 6px 15px rgba(0, 150, 173, 0.25); }
     }
     
+    #device-detected {
+      display: none;
+      opacity: 1;
+      transition: opacity 0.8s ease;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    
+    .device-notification {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-top: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      transform: scale(0.9);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      70% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    #device-icon {
+      margin-right: 15px;
+    }
+    
+    .device-text {
+      text-align: left;
+    }
+    
+    .device-text h3 {
+      margin: 0 0 5px 0;
+      font-size: 18px;
+      color: #333;
+    }
+    
+    .device-text p {
+      margin: 0;
+      font-size: 15px;
+      color: #666;
+    }
+    
+    #device-type {
+      font-weight: bold;
+      color: #0096ad;
+    }
+    
+    #loading-progress {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      width: 100%;
+    }
+    
     /* 加入順暢的出現動畫 */
     .fade-in {
       animation: fadeIn 0.8s ease forwards;
@@ -331,10 +419,22 @@
     <img src="transcribe.png" alt="AI會議助手圖示" class="app-logo">
     
     <div id="loading">
-      <h1>準備下載 AI會議助手</h1>
-      <p id="redirect-text">正在為您導向適合的下載頁面...</p>
-      <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
+      <div id="device-detected">
+        <div class="device-notification">
+          <div id="device-icon"></div>
+          <div class="device-text">
+            <h3>已偵測到您的裝置</h3>
+            <p>您正在使用 <span id="device-type"></span> 裝置，將為您導向對應的下載頁面</p>
+          </div>
+        </div>
+      </div>
+      
+      <div id="loading-progress">
+        <h1>準備下載 AI會議助手</h1>
+        <p id="redirect-text">正在為您導向適合的下載頁面...</p>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
       </div>
     </div>
     
