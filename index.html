@@ -386,11 +386,39 @@
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
     
+    /* 修改這些樣式來確保垂直對齊 */
+    .device-type {
+      display: flex;
+      align-items: center; /* 保持垂直居中 */
+      justify-content: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      animation: bounce 0.6s ease;
+    }
+    
+    .device-icon {
+      width: 36px;
+      height: 36px;
+      margin-right: 15px;
+      color: #0096ad;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+      display: block; /* 確保顯示為塊級元素 */
+    }
+    
+    .device-type p {
+      margin: 0; /* 移除段落的默認邊距 */
+      display: flex;
+      align-items: center;
+      height: 36px; /* 使文字容器與圖標高度一致 */
+    }
+    
     #device-name, #manual-device-name {
       font-weight: bold;
       color: #0096ad;
       font-size: 20px;
       text-shadow: 0 1px 2px rgba(0, 150, 173, 0.1);
+      line-height: 36px; /* 使行高與圖標高度一致 */
     }
     
     .redirect-message {
