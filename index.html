@@ -2,29 +2,123 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>下載 App 測試版</title>
+  <title>下載 AI會議助手</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="下載我們的應用程式測試版">
+  <meta name="description" content="下載AI會議助手應用程式">
+  <!-- Open Graph 元標籤 -->
+  <meta property="og:title" content="AI會議助手">
+  <meta property="og:description" content="下載AI會議助手應用程式">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://selecttest.github.io/transcriber/">
+  <meta property="og:image" content="transcribe_new.png">
+  <meta property="og:site_name" content="AI會議助手">
+  
   <script>
-    window.onload = function() {
-      // Show loading animation first
+    // 當頁面完全載入後執行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 顯示載入動畫
       document.getElementById("loading").style.display = "block";
       
+      // 進度條動畫
+      const progressBar = document.getElementById('progress-bar');
+      const progressStatus = document.getElementById('progress-status');
+      let progress = 0;
+      
+      // 進度條更新函數
+      function updateProgress(value, statusText) {
+        progress = value;
+        progressBar.style.width = progress + '%';
+        progressStatus.textContent = statusText;
+      }
+      
+      // 初始進度
+      updateProgress(10, '正在偵測裝置類型...');
+      
+      // 設定一個計時器，確保頁面有時間呈現
       setTimeout(function() {
-        var ua = navigator.userAgent || navigator.vendor || window.opera;
-        if (/android/i.test(ua)) {
-          // Android device redirect
-          window.location.href = "https://play.google.com/apps/testing/org.iii.transcriber";
-        } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-          // iOS device redirect
-          window.location.href = "https://testflight.apple.com/join/31JwQpF7";
-        } else {
-          // Other platforms (like desktop) show manual selection
-          document.getElementById("loading").style.display = "none";
-          document.getElementById("manual").style.display = "block";
-        }
-      }, 1500); // Short delay for better UX
-    };
+        updateProgress(30, '辨識設備中...');
+        
+        setTimeout(function() {
+          var ua = navigator.userAgent || navigator.vendor || window.opera;
+          console.log("用戶代理: " + ua); // 用於調試
+          
+          updateProgress(50, '已確認設備類型');
+          
+          setTimeout(function() {
+            updateProgress(70, '準備顯示裝置資訊');
+            
+            setTimeout(function() {
+              updateProgress(100, '裝置偵測完成');
+              
+              // 隱藏載入畫面，先顯示裝置資訊
+              document.getElementById("loading").style.display = "none";
+              document.getElementById("device-info").style.display = "block";
+              
+              // 將偵測到的裝置資訊填入
+              let deviceName = "未知";
+              let iconUrl = "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/help-circle.svg";
+              let redirectUrl = "";
+              let countdown = 3; // 倒數3秒
+              
+              // 更精確的Android裝置檢測
+              if (ua.toLowerCase().indexOf("android") > -1) {
+                console.log("檢測到Android設備");
+                deviceName = "Android";
+                iconUrl = "https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg";
+                redirectUrl = "https://play.google.com/apps/testing/org.iii.transcriber";
+              } 
+              // iOS裝置處理
+              else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+                console.log("檢測到iOS設備");
+                deviceName = "iOS";
+                iconUrl = "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg";
+                redirectUrl = "https://testflight.apple.com/join/31JwQpF7";
+              } 
+              // 其他裝置顯示手動選擇
+              else {
+                console.log("無法自動檢測行動設備類型，顯示手動選擇");
+                document.getElementById("device-info").style.display = "none";
+                document.getElementById("manual").style.display = "block";
+                
+                // 檢測常見設備類型並顯示
+                if (/Windows/.test(ua)) {
+                  document.getElementById('manual-device-name').textContent = "Windows";
+                  document.getElementById('manual-device-icon').src = "https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg";
+                } else if (/Macintosh|Mac OS X/.test(ua)) {
+                  document.getElementById('manual-device-name').textContent = "Mac";
+                  document.getElementById('manual-device-icon').src = "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg";
+                } else if (/Linux/.test(ua)) {
+                  document.getElementById('manual-device-name').textContent = "Linux";
+                  document.getElementById('manual-device-icon').src = "https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg";
+                }
+                return; // 不執行後續的轉址步驟
+              }
+              
+              // 設置裝置資訊
+              document.getElementById('device-name').textContent = deviceName;
+              document.getElementById('device-icon').src = iconUrl;
+              
+              // 設置倒數計時顯示
+              const countdownElement = document.getElementById('countdown');
+              countdownElement.textContent = countdown;
+              
+              // 開始倒數計時然後轉址
+              const countdownInterval = setInterval(function() {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                  clearInterval(countdownInterval);
+                  // 延遲顯示後自動轉址到相應的下載頁面
+                  window.location.href = redirectUrl;
+                }
+              }, 1000);
+              
+            }, 500); // 進度階段 4
+          }, 500); // 進度階段 3
+        }, 600); // 進度階段 2
+      }, 800); // 進度階段 1
+    });
   </script>
   <style>
     * {
@@ -38,36 +132,96 @@
       text-align: center;
       padding: 20px;
       background-color: #f8f9fa;
+      background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      animation: fadeIn 0.8s ease;
+    }
+    
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
     }
     
     .container {
       max-width: 500px;
       width: 100%;
       background-color: white;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideUp 0.6s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .container:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #0096ad, #00d4ff);
+    }
+    
+    @keyframes slideUp {
+      0% { 
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% { 
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .app-logo {
       width: 120px;
       height: 120px;
-      margin: 0 auto 20px;
+      margin: 0 auto 25px;
       display: block;
-      border-radius: 24px;
-      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 150, 173, 0.2);
+      transform: scale(1);
+      transition: transform 0.3s ease;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .app-logo:hover {
+      transform: scale(1.05);
     }
     
     h1 {
       font-size: 24px;
       margin-bottom: 20px;
       color: #0096ad;
+      position: relative;
+      display: inline-block;
+    }
+    
+    h1:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, #0096ad, #00d4ff);
+      transform: translateX(-50%);
+      border-radius: 3px;
     }
     
     p {
@@ -86,24 +240,51 @@
       border-radius: 50px;
       font-weight: 600;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0, 150, 173, 0.3);
+      box-shadow: 0 4px 10px rgba(0, 150, 173, 0.3);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.4s ease;
+      z-index: -1;
     }
     
     .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 150, 173, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 15px rgba(0, 150, 173, 0.4);
+    }
+    
+    .btn:hover:before {
+      left: 100%;
     }
     
     .btn-android {
-      background-color: #3ddc84;
+      background-image: linear-gradient(135deg, #3ddc84 0%, #2ab965 100%);
       color: #000;
     }
     
     .btn-ios {
-      background-color: #007aff;
+      background-image: linear-gradient(135deg, #007aff 0%, #00b2ff 100%);
     }
     
-    .loading {
+    #loading {
+      display: block;
+    }
+    
+    #device-info {
+      display: none;
+    }
+    
+    #manual {
       display: none;
     }
     
@@ -115,6 +296,158 @@
       height: 40px;
       animation: spin 1s linear infinite;
       margin: 20px auto;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 10px;
+      background-color: #f1f1f1;
+      border-radius: 10px;
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background-image: linear-gradient(90deg, #0096ad, #00d4ff);
+      border-radius: 10px;
+      transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    
+    #progress-status {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+      font-style: italic;
+      animation: fadeInOut 1.5s ease infinite;
+    }
+    
+    @keyframes fadeInOut {
+      0% { opacity: 0.7; }
+      50% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
+    
+    .debug-info {
+      font-size: 12px;
+      color: #999;
+      margin-top: 20px;
+      display: none;
+    }
+    
+    .device-info-box {
+      background-color: rgba(0, 150, 173, 0.08);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 3px 10px rgba(0, 150, 173, 0.1);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInScale 0.5s ease;
+    }
+    
+    @keyframes fadeInScale {
+      0% { 
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% { 
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .device-info-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 150, 173, 0.15);
+    }
+    
+    .device-info-box h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #0096ad;
+    }
+    
+    .device-type {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      animation: bounce 0.6s ease;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
+    .device-icon {
+      width: 36px;
+      height: 36px;
+      margin-right: 15px;
+      color: #0096ad;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+    
+    /* 修改這些樣式來確保垂直對齊 */
+    .device-type {
+      display: flex;
+      align-items: center; /* 保持垂直居中 */
+      justify-content: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      animation: bounce 0.6s ease;
+    }
+    
+    .device-icon {
+      width: 36px;
+      height: 36px;
+      margin-right: 15px;
+      color: #0096ad;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+      display: block; /* 確保顯示為塊級元素 */
+    }
+    
+    .device-type p {
+      margin: 0; /* 移除段落的默認邊距 */
+      display: flex;
+      align-items: center;
+      height: 36px; /* 使文字容器與圖標高度一致 */
+    }
+    
+    #device-name, #manual-device-name {
+      font-weight: bold;
+      color: #0096ad;
+      font-size: 20px;
+      text-shadow: 0 1px 2px rgba(0, 150, 173, 0.1);
+      line-height: 36px; /* 使行高與圖標高度一致 */
+    }
+    
+    .redirect-message {
+      font-size: 16px;
+      color: #0096ad;
+      margin: 20px 0;
+      animation: fadeIn 1s ease;
+    }
+    
+    .countdown {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+      background-color: #0096ad;
+      color: white;
+      border-radius: 50%;
+      margin: 0 5px;
+      font-weight: bold;
+      box-shadow: 0 3px 8px rgba(0, 150, 173, 0.3);
+      animation: pulse 1s infinite alternate;
     }
     
     @keyframes spin {
@@ -141,4 +474,55 @@
 </head>
 <body>
   <div class="container">
-    <img src="transcribe.png" alt="App Logo" class="app-logo">
+    <img src="transcribe.png" alt="AI會議助手" class="app-logo">
+    
+    <!-- 載入畫面 -->
+    <div id="loading">
+      <h1>準備下載 AI會議助手</h1>
+      <p>正在為您導向適合的下載頁面，請稍候...</p>
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <p id="progress-status">正在偵測裝置類型...</p>
+      <div class="spinner"></div>
+    </div>
+    
+    <!-- 裝置資訊顯示 (先顯示再轉址) -->
+    <div id="device-info">
+      <h1>下載 AI會議助手</h1>
+      <div class="device-info-box">
+        <h2>已偵測到您的裝置</h2>
+        <div class="device-type">
+          <img src="" alt="裝置" class="device-icon" id="device-icon">
+          <p><span id="device-name">裝置</span></p>
+        </div>
+        <p class="redirect-message">
+          將在 <span class="countdown" id="countdown">3</span> 秒後自動前往下載頁面
+        </p>
+      </div>
+    </div>
+    
+    <!-- 手動選擇 (只有非行動裝置會看到) -->
+    <div id="manual">
+      <h1>下載 AI會議助手</h1>
+      <div class="device-info-box">
+        <h2>已偵測到您的裝置</h2>
+        <div class="device-type">
+          <img src="" alt="裝置" class="device-icon" id="manual-device-icon">
+          <p><span id="manual-device-name">裝置</span></p>
+        </div>
+        <p>請選擇您要下載的版本</p>
+      </div>
+      <a href="https://play.google.com/apps/testing/org.iii.transcriber" class="btn btn-android">Android 版下載</a>
+      <a href="https://testflight.apple.com/join/31JwQpF7" class="btn btn-ios">iOS 版下載</a>
+      <p class="debug-info" id="debug-ua"></p>
+      
+      <script>
+        // 顯示用戶代理資訊以便調試
+        document.getElementById('debug-ua').textContent = "用戶代理: " + navigator.userAgent;
+        document.getElementById('debug-ua').style.display = "block";
+      </script>
+    </div>
+  </div>
+</body>
+</html>
